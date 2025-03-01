@@ -5,7 +5,8 @@
 import words from "./assets/words.json" with { type: "json" };
 
 const getRandomElement = (array) => {
-  return array[0];
+  const randomValidIdx = Math.floor((Math.random() * 100)) % array.length;
+  return array[randomValidIdx];
 }
 
 function main () {
