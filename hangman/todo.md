@@ -1,0 +1,12 @@
+- [ ] Design the layout
+- [ ] Implement game logic
+  - [ ] Write a JavaScript script to generate random words from a predefined set
+  - [ ] Develop the word-guessing logic
+  - [ ] Implement validation logic
+- [ ] Create the visual elements for the word-guessing section
+  - [ ] Display the generated word path as dashed lines
+  - [ ] Provide letter selection options
+  - [ ] Implement win/lose visual feedback
+- [ ] Develop the visual and logical components for the hangman figure
+  - [ ] Construct the body parts incrementally
+  - [ ] Integrate game logic with body part appearance
