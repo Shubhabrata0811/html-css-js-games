@@ -44,8 +44,21 @@ const startGame = () => {
   setWord("_ ".repeat(word.length).trim());
 };
 
+const restartGame = () => {
+  document.getElementById("restart").style.display = "none";
+  document.getElementById("word-progress").style.display = "none";
+  document.getElementById("keyboard").style.display = "none";
+
+
+  document.getElementById("word-list-selector").style.display = "block";
+  document.getElementById("start").style.display = "block";
+
+  setWord("");
+}
+
 function main() {
   document.getElementById("start").addEventListener("click", startGame);
+  document.getElementById("restart").addEventListener("click", restartGame);
   createKeyboard();
 }
 
