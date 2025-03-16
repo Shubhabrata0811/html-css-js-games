@@ -1,65 +1,71 @@
-import { getRandomWord } from "./game.js";
+// import wordsList from "./assets/words.json" with { type: "json" };
 
-function createKeyboard() {
-  const keyboard = document.getElementById("keyboard");
-  for (let i = 65; i <= 90; i++) {
-    const key = document.createElement("div");
-    key.classList.add("key");
-    key.textContent = String.fromCharCode(i);
-    key.addEventListener("click", () => {
-      console.log(key.textContent);
-    });
-    keyboard.appendChild(key);
-  }
-}
+import { HangMan } from "./src/HangMan.js";
 
-const setWord = (word) => {
-  const wordDiv = document.getElementById("word-progress");
-  wordDiv.textContent = word;
+const fetchJSON = async (filePath) => {
+  const path = new URL(filePath, import.meta.url).href;
+  const response = await fetch(path);
+  return response.json();
 };
 
-const getCategory = () => {
-  const wordSetSelector = document.getElementById("word-list-selector");
-  if (wordSetSelector.value === "not-selected") {
-    alert("Please select a valid choice!!");
-    return null;
-  }
-  return wordSetSelector.value;
+const createOption = (value) => {
+  const option = document.createElement("option");
+  option.value = value;
+  option.textContent = value[0].toUpperCase() + value.slice(1);
+  return option;
 };
 
-const startGame = () => {
-  const category = getCategory();
-  if (!category) return;
+const createSvg = (id, elements) => {
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("id", id);
+  svg.setAttribute("width", "550");
+  svg.setAttribute("height", "600");
 
-  document.getElementById("word-list-selector").style.display = "none";
-  document.getElementById("start").style.display = "none";
+  elements.forEach(({ tag, attrs }) => {
+    const elem = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    Object.entries(attrs).forEach(([key, value]) =>
+      elem.setAttribute(key, value)
+    );
+    svg.appendChild(elem);
+  });
 
-  document.getElementById("restart").style.display = "block";
-  document.getElementById("word-progress").style.display = "block";
-
-  const word = getRandomWord(category);
-  console.log("Selected Word:", word);
-  document.getElementById("keyboard").style.display = "flex";
-
-  setWord("_ ".repeat(word.length).trim());
+  return svg;
 };
 
-const restartGame = () => {
-  document.getElementById("restart").style.display = "none";
-  document.getElementById("word-progress").style.display = "none";
-  document.getElementById("keyboard").style.display = "none";
+const initialViewSetUp = (categories, SVGs) => {
+  const categorySelector = document.getElementById("word-category-selector");
+  const allOptions = ["any", ...categories];
+  allOptions.forEach((category) => {
+    categorySelector.appendChild(createOption(category));
+  });
 
+  const visualSection = document.getElementById("game-visual");
+  const svg = createSvg(...Object.entries(SVGs)[0]);
+  visualSection.appendChild(svg);
+};
 
-  document.getElementById("word-list-selector").style.display = "block";
-  document.getElementById("start").style.display = "block";
+const startGame = (svgId, elements) => {
+  const visualSection = document.getElementById("game-visual");
+  document.getElementById("before-starting-svg").style = "display: none";
+  const svg = createSvg(svgId, elements.slice(0, 5));
+  visualSection.appendChild(svg);
+  document.getElementById("start").style = "display: none";
+};
 
-  setWord("");
+async function main() {
+  const wordsLists = await fetchJSON("./assets/words.json");
+  const categories = Object.keys(wordsLists);
+  const SVGs = await fetchJSON("./assets/svg.json");
+
+  initialViewSetUp(categories, SVGs);
+
+  const startButton = document.getElementById("start");
+  startButton.addEventListener("click", () =>
+    startGame(...Object.entries(SVGs)[1])
+  );
+
+  const hangMan = new HangMan(wordsLists, 6);
+  window.hangMan = hangMan;
 }
 
-function main() {
-  document.getElementById("start").addEventListener("click", startGame);
-  document.getElementById("restart").addEventListener("click", restartGame);
-  createKeyboard();
-}
-
-main();
+window.onload = main;

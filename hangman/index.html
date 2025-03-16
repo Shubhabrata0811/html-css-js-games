@@ -4,32 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hangman</title>
-    <link rel="stylesheet" href="style.css" />
     <script type="module" src="script.js"></script>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <header><h1>Hangman</h1></header>
+    <header>
+      <h1>Hangman</h1>
+    </header>
     <main>
-      <div id="visual-feedback">
-        <svg height="200px" width="200px" style="background-color: black"></svg>
-      </div>
+      <div id="game-visual"></div>
       <div id="game-console">
-        <select name="word set" id="word-list-selector">
-          <option value="not-selected">--Please choose an Word set--</option>
-          <option value="vegetables">Vegetable</option>
-          <option value="fruits">Fruits</option>
-          <option value="birds">Birds</option>
-          <option value="animals">Animals</option>
-        </select>
-        <button id="start">Start</button>
-        <button id="restart">Restart</button>
-        <div id="word-progress">WORD</div>
-        <div id="keyboard"></div>
+        <select name="category selector" id="word-category-selector"></select>
+        <button id="start">START</button>
       </div>
     </main>
-
-    <script>
-      
-    </script>
   </body>
 </html>
